@@ -59,14 +59,30 @@ install_packages() {
 }
 
 install_scripts() {
+	# check if git is installed
+	if hash git 2>/dev/null; then
+		:
+	else
+		sudo apt-get update
+		sudo apt-get install -y git
+	fi
+
 	# check if directory already exists
-	REPO="~/tmp/deap-setup"
-	if [ -d "$REPO" ];
-	then
+	REPO="/tmp/deap-setup"
+	if [ -d $REPO/.git ]; then
+		echo "Pulling Repo"
 		git --git-dir="$REPO" pull
 	else
+		echo "Cloning Repo"
 		git clone "https://github.com/braydenm303/deap-setup" "$REPO"
 	fi
+	SCRIPT_FOLDER="~/bin"
+	mkdir -p "$SCRIPT_FOLDER"
+	SCRIPTS="$REPO"/bin/*
+	for f in $SCRIPTS
+	do
+		cp $f $SCRIPT_FOLDER/
+	done
 }
 
 update() {
