@@ -20,6 +20,11 @@ main() {
 }
 
 install() {
+	install_packages
+	install_scripts
+}
+
+install_packages() {
 	# update the list of available software
 	sudo apt-get update
 
@@ -53,8 +58,19 @@ install() {
 	sudo reboot
 }
 
+install_scripts() {
+	# check if directory already exists
+	REPO="~/tmp/deap-setup"
+	if [ -d "$REPO" ];
+	then
+		git --git-dir="$REPO" pull
+	else
+		git clone "https://github.com/braydenm303/deap-setup" "$REPO"
+	fi
+}
+
 update() {
-	install
+	install_scripts
 }
 
 check_network() {
