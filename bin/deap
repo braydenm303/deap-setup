@@ -1,0 +1,78 @@
+#! /bin/bash
+
+main() {
+	case "$1" in
+		"install")
+			check_network
+			install
+			exit
+			;;
+		"update")
+			check_network
+			update
+			exit
+			;;
+		*)
+			echo "Usage: '$0 install'"
+			echo "       '$0 update'"
+			;;
+	esac
+}
+
+install() {
+	# update the list of available software
+	sudo apt-get update
+
+	# apply any software updates
+	sudo apt-get upgrade -y
+
+	# apply any system updates
+	sudo apt-get dist-upgrade -y
+
+	# clean up after ourselves
+	sudo apt-get clean
+
+	# install the graphic interfaces
+	sudo apt-get install -y xserver-xorg xinit raspberrypi-ui-mods gvfs
+
+	# install applications
+	sudo apt-get install -y lxterminal qjackctl zynaddsubfx
+
+	# install pure data
+	# download package
+	PD_VERSION="2.2.3"
+	wget 'https://github.com/agraef/purr-data/releases/download/'"$PD_VERSION"'/pd-l2ork-'"$PD_VERSION"'-raspbian-armv7l.deb' -O /tmp/pd-l2ork.deb
+	# install package
+	sudo dpkg -i /tmp/pd-l2ork.deb
+	# fix unmet dependencies
+	sudo apt-get -f install
+	# install other dependencies
+	sudo apt-get install -y libnss3 libgconf2-4
+
+	# reboot into graphic interface
+	sudo reboot
+}
+
+update() {
+	install
+}
+
+check_network() {
+	test=github.com
+	if nc -zw1 $test 443 && echo |openssl s_client -connect $test:443 2>&1 |awk '
+		handshake && $1 == "Verification" { if ($2=="OK") exit; exit 1 }
+		$1 $2 == "SSLhandshake" { handshake = 1 }'
+	then
+	else
+		echo "No internet connection."
+		echo "Scanning for available networks..."
+		sudo iwlist wlan0 scan | grep SSID
+		read -p "Wifi name (SSID): " wifi_name
+		read -p "Wifi password (PSK): " wifi_password
+		wpa_passphrase "$wifi_name" "$wifi_password" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null
+		sudo wpa_cli reconfigure
+	fi
+
+}
+
+main "$@"
