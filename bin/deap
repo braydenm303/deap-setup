@@ -79,6 +79,7 @@ check_network() {
 		handshake && $1 == "Verification" { if ($2=="OK") exit; exit 1 }
 		$1 $2 == "SSLhandshake" { handshake = 1 }'
 	then
+		:
 	else
 		echo "No internet connection."
 		echo "Scanning for available networks..."
