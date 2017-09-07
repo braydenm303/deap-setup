@@ -68,7 +68,7 @@ install_scripts() {
 	fi
 
 	# check if directory already exists
-	REPO="/tmp/deap-setup"
+	REPO="/home/pi/tmp/deap-setup"
 	if [ -d $REPO/.git ]; then
 		echo "Pulling Repo"
 		git --git-dir="$REPO" pull
@@ -76,13 +76,17 @@ install_scripts() {
 		echo "Cloning Repo"
 		git clone "https://github.com/braydenm303/deap-setup" "$REPO"
 	fi
-	SCRIPT_FOLDER="~/bin"
+	SCRIPT_FOLDER="/home/pi/bin"
 	mkdir -p "$SCRIPT_FOLDER"
 	SCRIPTS="$REPO"/bin/*
 	for f in $SCRIPTS
 	do
 		cp $f $SCRIPT_FOLDER/
+		chmod +x $f
 	done
+
+	# add ~/bin to path
+	update_path $SCRIPT_FOLDER
 }
 
 update() {
@@ -107,5 +111,9 @@ check_network() {
 	fi
 
 }
+
+# update_path taken from https://unix.stackexchange.com/questions/124444/how-can-i-cleanly-add-to-path
+update_path() { case ":${PATH:=$1}:" in *:$1:*) ;; *) PATH="$1:$PATH" ;; esac; }
+
 
 main "$@"
