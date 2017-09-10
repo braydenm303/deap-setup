@@ -109,7 +109,7 @@ update_repo() {
 	# check if directory already exists
 	if [ -d $REPO/.git ]; then
 		echo "Pulling Repo"
-		git --git-dir="$REPO" pull
+		git -C "$REPO" pull
 	else
 		echo "Cloning Repo"
 		git clone "https://github.com/braydenm303/deap-setup" "$REPO"
