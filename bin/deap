@@ -44,7 +44,7 @@ install_packages() {
 	sudo apt-get autoremove -y
 
 	# install applications
-	sudo apt-get install -y lxterminal qjackctl zynaddsubfx
+	sudo apt-get install -y lxterminal qjackctl sooperlooper zynaddsubfx
 
 	# install pure data
 	# download package
