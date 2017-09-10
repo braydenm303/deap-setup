@@ -53,19 +53,19 @@ install_packages() {
 
 	# install pure data
 	# download package
-	PD_VERSION="2.2.3"
+	PD_version="2.2.3"
 	# TODO: make this support more architectures and distros
-	case (uname -p) in
+	case $(uname -p) in
 		"x86_64")
-			PD_SYS=ubuntu_16.04
-			PD_ARCH=amd64
+			PD_sys=ubuntu_16.04
+			PD_arch=amd64
 			;;
-		*)
-			PD_SYS=raspbian
-			PD_ARCH=armv7l
+		*) # fallback to raspbian
+			PD_sys=raspbian
+			PD_arch=armv7l
 			;;
 	esac
-	wget 'https://github.com/agraef/purr-data/releases/download/'"$PD_VERSION"'/pd-l2ork-'"$PD_VERSION"'-'"$PD_SYS"'-'"$PD_ARCH" -O /tmp/pd-l2ork.deb
+	wget 'https://github.com/agraef/purr-data/releases/download/'"$PD_version"'/pd-l2ork-'"$PD_version"'-'"$PD_sys"'-'"$PD_arch" -O /tmp/pd-l2ork.deb
 	# install package
 	sudo dpkg -i /tmp/pd-l2ork.deb
 	# fix unmet dependencies
