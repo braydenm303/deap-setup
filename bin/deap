@@ -94,7 +94,7 @@ install_scripts() {
 
 install_local_data() {
 	update_repo
-	cp -r "$REPO"/local "$HOME"/.local
+	cp -r "$REPO"/local/* "$HOME"/.local
 }
 
 update_repo() {
