@@ -34,9 +34,6 @@ install_packages() {
 	# apply any system updates
 	sudo apt-get dist-upgrade -y
 
-	# clean up after ourselves
-	sudo apt-get clean
-
 	# install the graphic interfaces
 	sudo apt-get install -y xserver-xorg xinit raspberrypi-ui-mods gvfs
 	# remove screensaver
@@ -57,6 +54,9 @@ install_packages() {
 	# install other dependencies
 	sudo apt-get install -y libnss3 libgconf2-4
 
+	# clean up after ourselves
+	sudo apt-get clean
+
 	# reboot into graphic interface
 	sudo reboot
 }
@@ -71,7 +71,7 @@ install_scripts() {
 	fi
 
 	# check if directory already exists
-	REPO="/home/pi/tmp/deap-setup"
+	REPO="/home/pi/deap-setup"
 	if [ -d $REPO/.git ]; then
 		echo "Pulling Repo"
 		git --git-dir="$REPO" pull
@@ -84,7 +84,7 @@ install_scripts() {
 	SCRIPTS="$REPO"/bin/*
 	for f in $SCRIPTS
 	do
-		cp $f $SCRIPT_FOLDER/
+		cp -f $f $SCRIPT_FOLDER/
 		chmod +x $f
 	done
 
