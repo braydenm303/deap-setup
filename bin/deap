@@ -39,6 +39,9 @@ install_packages() {
 
 	# install the graphic interfaces
 	sudo apt-get install -y xserver-xorg xinit raspberrypi-ui-mods gvfs
+	# remove screensaver
+	sudo apt-get remove -y xscreensaver
+	sudo apt-get autoremove -y
 
 	# install applications
 	sudo apt-get install -y lxterminal qjackctl zynaddsubfx
@@ -50,7 +53,7 @@ install_packages() {
 	# install package
 	sudo dpkg -i /tmp/pd-l2ork.deb
 	# fix unmet dependencies
-	sudo apt-get -f install
+	sudo apt-get -f -y install
 	# install other dependencies
 	sudo apt-get install -y libnss3 libgconf2-4
 
