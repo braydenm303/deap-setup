@@ -20,8 +20,8 @@ main() {
 }
 
 install() {
-	install_packages
 	install_scripts
+	install_packages
 }
 
 install_packages() {
