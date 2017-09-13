@@ -1,5 +1,7 @@
 #! /bin/bash
 
+REPO="$HOME/deap-setup"
+
 main() {
 	case "$1" in
 		"install")
@@ -21,6 +23,7 @@ main() {
 
 install() {
 	install_scripts
+	install_data
 	install_packages
 }
 
@@ -46,7 +49,18 @@ install_packages() {
 	# install pure data
 	# download package
 	PD_VERSION="2.2.3"
-	wget 'https://github.com/agraef/purr-data/releases/download/'"$PD_VERSION"'/pd-l2ork-'"$PD_VERSION"'-raspbian-armv7l.deb' -O /tmp/pd-l2ork.deb
+	# TODO: make this support more architectures and distros
+	case (uname -p) in
+		"x86_64")
+			PD_SYS=ubuntu_16.04
+			PD_ARCH=amd64
+			;;
+		*)
+			PD_SYS=raspbian
+			PD_ARCH=armv7l
+			;;
+	esac
+	wget 'https://github.com/agraef/purr-data/releases/download/'"$PD_VERSION"'/pd-l2ork-'"$PD_VERSION"'-'"$PD_SYS"'-'"$PD_ARCH" -O /tmp/pd-l2ork.deb
 	# install package
 	sudo dpkg -i /tmp/pd-l2ork.deb
 	# fix unmet dependencies
@@ -62,23 +76,7 @@ install_packages() {
 }
 
 install_scripts() {
-	# check if git is installed
-	if hash git 2>/dev/null; then
-		:
-	else
-		sudo apt-get update
-		sudo apt-get install -y git
-	fi
-
-	# check if directory already exists
-	REPO="/home/pi/deap-setup"
-	if [ -d $REPO/.git ]; then
-		echo "Pulling Repo"
-		git --git-dir="$REPO" pull
-	else
-		echo "Cloning Repo"
-		git clone "https://github.com/braydenm303/deap-setup" "$REPO"
-	fi
+	update_repo
 	SCRIPT_FOLDER="/home/pi/bin"
 	mkdir -p "$SCRIPT_FOLDER"
 	SCRIPTS="$REPO"/bin/*
@@ -92,8 +90,33 @@ install_scripts() {
 	update_path $SCRIPT_FOLDER
 }
 
+install_local_data() {
+	update_repo
+	cp -r "$REPO"/local "$HOME"/.local
+}
+
+update_repo() {
+	# check if git is installed
+	if hash git 2>/dev/null; then
+		:
+	else
+		sudo apt-get update
+		sudo apt-get install -y git
+	fi
+
+	# check if directory already exists
+	if [ -d $REPO/.git ]; then
+		echo "Pulling Repo"
+		git --git-dir="$REPO" pull
+	else
+		echo "Cloning Repo"
+		git clone "https://github.com/braydenm303/deap-setup" "$REPO"
+	fi
+}
+
 update() {
 	install_scripts
+	install_local_data
 }
 
 check_network() {
