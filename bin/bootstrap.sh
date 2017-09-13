@@ -17,3 +17,8 @@ else
 	wpa_passphrase "$wifi_name" "$wifi_password" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null
 	sudo wpa_cli reconfigure
 fi
+
+DEAP=/tmp/deap
+wget "https://raw.githubusercontent.com/braydenm303/deap-setup/master/bin/deap" -O $DEAP
+chmod +x $DEAP
+$DEAP install

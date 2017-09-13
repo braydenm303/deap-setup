@@ -75,9 +75,6 @@ install_packages() {
 
 	# clean up after ourselves
 	sudo apt-get clean
-
-	# reboot into graphic interface
-	sudo reboot
 }
 
 install_scripts() {
