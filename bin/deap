@@ -23,8 +23,13 @@ main() {
 
 install() {
 	install_scripts
-	install_data
+	install_local_data
 	install_packages
+}
+
+update() {
+	install_scripts
+	install_local_data
 }
 
 install_packages() {
@@ -114,11 +119,6 @@ update_repo() {
 	fi
 }
 
-update() {
-	install_scripts
-	install_local_data
-}
-
 check_network() {
 	test=github.com
 	if nc -zw1 $test 443 && echo |openssl s_client -connect $test:443 2>&1 |awk '
@@ -142,4 +142,5 @@ check_network() {
 update_path() { case ":${PATH:=$1}:" in *:$1:*) ;; *) PATH="$1:$PATH" ;; esac; }
 
 
+# run the main function
 main "$@"
