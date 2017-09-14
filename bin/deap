@@ -5,12 +5,10 @@ REPO="$HOME/deap-setup"
 main() {
 	case "$1" in
 		"install")
-			check_network
 			install
 			exit
 			;;
 		"update")
-			check_network
 			update
 			exit
 			;;
@@ -33,6 +31,8 @@ update() {
 }
 
 install_packages() {
+	check_network
+
 	# update the list of available software
 	sudo apt-get update
 
@@ -95,9 +95,14 @@ install_scripts() {
 install_local_data() {
 	update_repo
 	cp -r "$REPO"/local/* "$HOME"/.local
+
+	# restart menu to get new entries
+	lxpanelctl restart
 }
 
 update_repo() {
+	check_network
+
 	# check if git is installed
 	if hash git 2>/dev/null; then
 		:
