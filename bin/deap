@@ -65,7 +65,7 @@ install_packages() {
 			PD_arch=armv7l
 			;;
 	esac
-	wget 'https://github.com/agraef/purr-data/releases/download/'"$PD_version"'/pd-l2ork-'"$PD_version"'-'"$PD_sys"'-'"$PD_arch" -O /tmp/pd-l2ork.deb
+	wget 'https://github.com/agraef/purr-data/releases/download/'"$PD_version"'/pd-l2ork-'"$PD_version"'-'"$PD_sys"'-'"$PD_arch"'.deb' -O /tmp/pd-l2ork.deb
 	# install package
 	sudo dpkg -i /tmp/pd-l2ork.deb
 	# fix unmet dependencies
