@@ -48,8 +48,11 @@ install_packages() {
 	sudo apt-get remove -y xscreensaver
 	sudo apt-get autoremove -y
 
-	# install applications
-	sudo apt-get install -y lxterminal qjackctl sooperlooper zynaddsubfx
+	# install terminal
+	sudo apt-get install -y lxterminal
+
+	# install audio applications
+	sudo apt-get install -y amsynth audacity qjackctl sooperlooper zynaddsubfx
 
 	# install pure data
 	# download package
