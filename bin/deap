@@ -59,8 +59,24 @@ install_packages() {
 	# install terminal
 	sudo apt-get install -y lxterminal
 
+	# install a browser
+	sudo apt-get install -y midori
+	# sudo apt-get install -y chromium
+
 	# install audio applications
-	sudo apt-get install -y amsynth audacity qjackctl sooperlooper zynaddsubfx
+	sudo apt-get install -y \
+		amsynth \
+		audacity \
+		calf-plugins \
+		drumkv1 \
+		petri-foo \
+		qjackctl \
+		samplv1 \
+		sooperlooper \
+		synthv1 \
+		zynaddsubfx
+
+	#TODO: install JSampler TouchOSC Sunvox Carla Kxstudio 
 
 	# install pure data
 	# download package
