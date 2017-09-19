@@ -43,7 +43,15 @@ install_packages() {
 	sudo apt-get dist-upgrade -y
 
 	# install the graphic interfaces
-	sudo apt-get install -y xserver-xorg xinit raspberrypi-ui-mods gvfs
+	case $(uname -p) in
+		"x86_64")
+			# leave this to the user to decide
+			;;
+		*) # fallback to raspbian
+			sudo apt-get install -y xserver-xorg xinit raspberrypi-ui-mods gvfs
+			;;
+	esac
+
 	# remove screensaver
 	sudo apt-get remove -y xscreensaver
 	sudo apt-get autoremove -y
