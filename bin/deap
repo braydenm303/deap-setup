@@ -69,11 +69,13 @@ install_packages() {
 		audacity \
 		calf-plugins \
 		drumkv1 \
+		gedit \
 		petri-foo \
 		qjackctl \
 		samplv1 \
 		sooperlooper \
 		synthv1 \
+		vlc \
 		zynaddsubfx
 
 	#TODO: install JSampler TouchOSC Sunvox Carla Kxstudio 
