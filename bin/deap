@@ -50,19 +50,18 @@ install_packages() {
 			;;
 		*) # fallback to raspbian
 			sudo apt-get install -y xserver-xorg xinit raspberrypi-ui-mods gvfs
+			# install terminal
+			sudo apt-get install -y lxterminal
+
+			# install a browser
+			sudo apt-get install -y midori
+			# sudo apt-get install -y chromium
 			;;
 	esac
 
 	# remove screensaver
 	sudo apt-get remove -y xscreensaver
 	sudo apt-get autoremove -y
-
-	# install terminal
-	sudo apt-get install -y lxterminal
-
-	# install a browser
-	sudo apt-get install -y midori
-	# sudo apt-get install -y chromium
 
 	# install audio applications
 	sudo apt-get install -y \
@@ -94,13 +93,15 @@ install_packages() {
 			;;
 	esac
 	# check if pd is installed
-	if pd-l2ork -version | grep -Fxq $PD_version; then
-		# pd already installed and up to date
-		;;
-	else
+	Current_PD_version="$(pd-l2ork -version)"
+	if [[ $Current_PD_version != *$PD_version* ]]
+	then
 		wget 'https://github.com/agraef/purr-data/releases/download/'"$PD_version"'/pd-l2ork-'"$PD_version"'-'"$PD_sys"'-'"$PD_arch"'.deb' -O /tmp/pd-l2ork.deb
 		# install package
 		sudo dpkg -i /tmp/pd-l2ork.deb
+	else
+		# pd already installed and up to date
+		echo "pd-l2ork already installed"
 	fi
 	# fix unmet dependencies
 	sudo apt-get -f -y install
