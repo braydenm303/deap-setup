@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# install pure data
+
+# download package
+PD_version="2.2.3"
+# TODO: make this support more architectures and distros
+case $(uname -p) in
+	"x86_64")
+		PD_sys=ubuntu_16.04
+		PD_arch=amd64
+		;;
+	*) # fallback to raspbian
+		PD_sys=raspbian
+		PD_arch=armv7l
+		;;
+esac
+
+# check if pd is installed
+Current_PD_version="$(pd-l2ork -version)"
+if [[ $Current_PD_version != *$PD_version* ]]
+then
+	wget 'https://github.com/agraef/purr-data/releases/download/'"$PD_version"'/pd-l2ork-'"$PD_version"'-'"$PD_sys"'-'"$PD_arch"'.deb' -O /tmp/pd-l2ork.deb
+	# install package
+	sudo dpkg -i /tmp/pd-l2ork.deb
+else
+	# pd already installed and up to date
+	echo "pd-l2ork already installed"
+fi
+
+# fix unmet dependencies
+sudo apt-get -f -y install
+
+# install other dependencies
+sudo apt-get install -y libnss3 libgconf2-4

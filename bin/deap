@@ -1,5 +1,6 @@
 #! /bin/bash
 
+Script_Folder="$HOME/bin"
 REPO="$HOME/deap-setup"
 
 main() {
@@ -42,44 +43,12 @@ install_packages() {
 	# apply any system updates
 	sudo apt-get dist-upgrade -y
 
-	# install the graphic interfaces
-	case $(uname -p) in
-		"x86_64")
-			# leave this to the user to decide, for example:
-			# sudo apt-get install lubuntu-desktop
-			;;
-		*) # fallback to raspbian
-			sudo apt-get install -y xserver-xorg xinit raspberrypi-ui-mods gvfs
-			# install terminal
-			sudo apt-get install -y lxterminal
-
-			# install a browser
-			sudo apt-get install -y midori
-			# sudo apt-get install -y chromium
-			;;
-	esac
-
-	# remove screensaver
-	sudo apt-get remove -y xscreensaver
-	sudo apt-get autoremove -y
-
-	# install audio applications
-	sudo apt-get install -y \
-		amsynth \
-		audacity \
-		calf-plugins \
-		drumkv1 \
-		gedit \
-		petri-foo \
-		qjackctl \
-		samplv1 \
-		sooperlooper \
-		synthv1 \
-		vlc \
-		zynaddsubfx
+	# run all the install scripts
+	run-parts $Script_Folder/install/
 
 	#TODO: install JSampler TouchOSC Sunvox Carla Kxstudio 
 
+	if false; then
 	# install pure data
 	# download package
 	PD_version="2.2.3"
@@ -109,10 +78,11 @@ install_packages() {
 	sudo apt-get -f -y install
 	# install other dependencies
 	sudo apt-get install -y libnss3 libgconf2-4
+	fi
 
 	# install cadence
 	wget 'https://downloads.sourceforge.net/project/kxstudio/Releases/cadence/Cadence-0.8.1-src.tar.bz2?r=http%3A%2F%2Fkxstudio.linuxaudio.org%2FDownloads&ts=1509052176&use_mirror=cfhcable' -O /tmp/cadence.tar.bz2
-	tar xvjf /tmp/cadence.tar.bz2
+	# tar xvjf /tmp/cadence.tar.bz2
 
 	# clean up after ourselves
 	sudo apt-get clean
@@ -120,17 +90,22 @@ install_packages() {
 
 install_scripts() {
 	update_repo
-	SCRIPT_FOLDER="$HOME/bin"
-	mkdir -p "$SCRIPT_FOLDER"
-	SCRIPTS="$REPO"/bin/*
-	for f in $SCRIPTS
+	mkdir -p "$Script_Folder"
+	Scripts="$REPO"/bin/*
+	for f in $Scripts
 	do
-		cp -f $f $SCRIPT_FOLDER/
+		chmod +x $f
+		cp -rf $f $Script_Folder/
+	done
+
+	Install_Scripts="$Script_Folder"/install/*
+	for f in $Install_Scripts
+	do
 		chmod +x $f
 	done
 
 	# add ~/bin to path
-	update_path $SCRIPT_FOLDER
+	update_path $Script_Folder
 }
 
 install_local_data() {

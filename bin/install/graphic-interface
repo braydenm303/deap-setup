@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# install the graphic interfaces
+case $(uname -p) in
+	"x86_64")
+		# leave this to the user to decide, for example:
+		# sudo apt-get install lubuntu-desktop
+		;;
+	*) # fallback to raspbian
+		sudo apt-get install -y xserver-xorg xinit raspberrypi-ui-mods gvfs
+		# install terminal
+		sudo apt-get install -y lxterminal
+		# install a browser
+		sudo apt-get install -y midori
+		# sudo apt-get install -y chromium
+		;;
+esac
+
+# remove screensaver
+sudo apt-get remove -y xscreensaver
+sudo apt-get autoremove -y
