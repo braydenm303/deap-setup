@@ -2,4 +2,4 @@
 
 # install cadence
 wget 'https://downloads.sourceforge.net/project/kxstudio/Releases/cadence/Cadence-0.8.1-src.tar.bz2?r=http%3A%2F%2Fkxstudio.linuxaudio.org%2FDownloads&ts=1509052176&use_mirror=cfhcable' -O /tmp/cadence.tar.bz2
-# tar xvjf /tmp/cadence.tar.bz2
+tar xvjf --directory /tmp/cadence/ /tmp/cadence.tar.bz2
